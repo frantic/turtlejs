@@ -2,14 +2,32 @@
 <html>
 <head>
   <title>Turtle.js</title>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/ace.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/theme-solarized_light.js"></script>
+  <style type="text/css">
+    #editor {
+      width: 300px;
+      height: 300px;
+      display: inline-block;
+    }
+    canvas {
+      border: solid 1px #eee;
+    }
+  </style>
 </head>
 <body>
-  <textarea></textarea>
+  <div id="editor"></div>
   <button onclick="run();">Run</button>
   <canvas width="300" height="300"></canvas>
   <div id="output"></div>
 
   <script type="text/javascript">
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/solarized_light");
+    editor.getSession().setMode("ace/mode/javascript");
+    editor.getSession().setOption("useWorker", false);
+    editor.focus();
+
     var textarea = document.getElementsByTagName('textarea')[0];
     var output = document.getElementById('output');
     var canvas = document.getElementsByTagName('canvas')[0];
@@ -17,7 +35,7 @@
 
     context.strokeStyle = 'black';
 
-    textarea.value = window.localStorage.getItem('code') || 'put your code here';
+    editor.setValue(window.localStorage.getItem('code') || 'put your code here');
 
     var x, y, a;
 
@@ -49,7 +67,7 @@
       a = 90;
       canvas.width = canvas.width; // clowns
       context.moveTo(x, y);
-      var code = textarea.value;
+      var code = editor.getValue();
       window.localStorage.setItem('code', code);
       output.innerText = '';
       try {
@@ -59,7 +77,7 @@
         console.error(e);
         log(e.message);
       }
-
+      editor.focus();
     }
   </script>
 </body>
