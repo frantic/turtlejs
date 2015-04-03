@@ -1,1 +1,47 @@
-It works!
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Turtle.js</title>
+</head>
+<body>
+  <textarea></textarea>
+  <button onclick="run();">Run</button>
+  <div id="output"></div>
+
+  <script type="text/javascript">
+    var textarea = document.getElementsByTagName('textarea')[0];
+    var output = document.getElementById('output');
+    textarea.value = window.localStorage.getItem('code') || 'put your code here';
+
+    function log(text) {
+      output.innerText += text + '\n';
+    }
+
+    function forward(distance) {
+      log('Moving forward by ' + distance);
+    }
+
+    function left(angle) {
+      log('Turning left by ' + angle + '\u00B0');
+    }
+
+    function right(angle) {
+      log('Turning right by ' + angle + '\u00B0');
+    }
+
+    function run() {
+      var code = textarea.value;
+      window.localStorage.setItem('code', code);
+      output.innerText = '';
+      try {
+        var fun = new Function('forward', 'left', 'right', code);
+        fun(forward, left, right);
+      } catch(e) {
+        console.error(e);
+        log(e.message);
+      }
+
+    }
+  </script>
+</body>
+</html>
