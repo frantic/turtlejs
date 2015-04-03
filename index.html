@@ -6,12 +6,20 @@
 <body>
   <textarea></textarea>
   <button onclick="run();">Run</button>
+  <canvas width="300" height="300"></canvas>
   <div id="output"></div>
 
   <script type="text/javascript">
     var textarea = document.getElementsByTagName('textarea')[0];
     var output = document.getElementById('output');
+    var canvas = document.getElementsByTagName('canvas')[0];
+    var context = canvas.getContext('2d');
+
+    context.strokeStyle = 'black';
+
     textarea.value = window.localStorage.getItem('code') || 'put your code here';
+
+    var x, y, a;
 
     function log(text) {
       output.innerText += text + '\n';
@@ -19,17 +27,28 @@
 
     function forward(distance) {
       log('Moving forward by ' + distance);
+      x = x + distance * Math.cos(a / 180 * Math.PI);
+      y = y - distance * Math.sin(a / 180 * Math.PI);
+      context.lineTo(x, y);
+      context.stroke();
     }
 
     function left(angle) {
+      a += angle;
       log('Turning left by ' + angle + '\u00B0');
     }
 
     function right(angle) {
+      a -= angle;
       log('Turning right by ' + angle + '\u00B0');
     }
 
     function run() {
+      x = 150;
+      y = 150;
+      a = 90;
+      canvas.width = canvas.width; // clowns
+      context.moveTo(x, y);
       var code = textarea.value;
       window.localStorage.setItem('code', code);
       output.innerText = '';
