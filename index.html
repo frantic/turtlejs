@@ -45,23 +45,20 @@
       output.innerText += text + '\n';
     }
 
-    function forward(distance) {
-      log('Moving forward by ' + distance);
-      x = x + distance * Math.cos(a / 180 * Math.PI);
-      y = y - distance * Math.sin(a / 180 * Math.PI);
-      context.lineTo(x, y);
+    var env = {
+      forward: function(distance) {
+        x = x + distance * Math.cos(a / 180 * Math.PI);
+        y = y - distance * Math.sin(a / 180 * Math.PI);
+        context.lineTo(x, y);
+      },
 
-    }
+      left : function(angle) { a += angle; },
+      right: function(angle) { a -= angle; }
+    };
 
-    function left(angle) {
-      a += angle;
-      log('Turning left by ' + angle + '\u00B0');
-    }
-
-    function right(angle) {
-      a -= angle;
-      log('Turning right by ' + angle + '\u00B0');
-    }
+    var prelude = Object.keys(env).map(function(key) {
+      return 'var ' + key + ' = env.' + key + ';'
+    }).join('');
 
     function run() {
       x = 150;
@@ -73,8 +70,8 @@
       window.localStorage.setItem('code', code);
       output.innerText = '';
       try {
-        var fun = new Function('forward', 'left', 'right', code);
-        fun(forward, left, right);
+        var fun = new Function('env', prelude + code);
+        fun(env);
       } catch(e) {
         console.error(e);
         log(e.message);
