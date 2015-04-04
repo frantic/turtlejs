@@ -39,7 +39,7 @@
     context.strokeStyle = 'black';
 
 
-    var x, y, a;
+    var x, y, a, isDrawing;
 
     function log(text) {
       output.innerText += text + '\n';
@@ -49,11 +49,18 @@
       forward: function(distance) {
         x = x + distance * Math.cos(a / 180 * Math.PI);
         y = y - distance * Math.sin(a / 180 * Math.PI);
-        context.lineTo(x, y);
+        if (isDrawing) {
+          context.lineTo(x, y);
+        } else {
+          context.moveTo(x, y);
+        }
       },
 
       left : function(angle) { a += angle; },
-      right: function(angle) { a -= angle; }
+      right: function(angle) { a -= angle; },
+
+      up   : function() { isDrawing = false; },
+      down : function() { isDrawing = true;  }
     };
 
     var prelude = Object.keys(env).map(function(key) {
@@ -64,6 +71,7 @@
       x = 150;
       y = 150;
       a = 90;
+      isDrawing = true;
       canvas.width = canvas.width; // clowns
       context.moveTo(x, y);
       var code = editor.getValue();
