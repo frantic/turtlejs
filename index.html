@@ -103,9 +103,12 @@
       context.stroke();
 
       new Program({code: code}).save().then(function(program) {
-        history.pushState(null, null, '#' + program.id);
+        history.pushState({code: code}, null, '#' + program.id);
       });
     }
+    window.addEventListener("popstate", function(e) {
+      editor.setValue(e.state.code);
+    });
   </script>
 </body>
 </html>
