@@ -5,6 +5,7 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/ace.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/theme-solarized_light.js"></script>
   <script type="text/javascript" src="lib/hidpi-canvas.min.js"></script>
+  <script src="http://www.parsecdn.com/js/parse-1.4.0.min.js"></script>
   <style type="text/css">
     #editor {
       width: 300px;
@@ -23,13 +24,27 @@
   <div id="output"></div>
 
   <script type="text/javascript">
+    Parse.initialize(
+      'bHBzIJkxI2qvBEWK1JhCCN319lkOIPdhmYwSdJm2',
+      'oNobScbnVnACmZCBFrRpkAxld3hDRGfsmQ8IPsaJ'
+    );
+    var Program = Parse.Object.extend('Program');
+
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/solarized_light");
     editor.getSession().setMode("ace/mode/javascript");
     editor.getSession().setOption("useWorker", false);
-    editor.setValue(window.localStorage.getItem('code') || 'put your code here');
-    editor.clearSelection();
-    editor.focus();
+
+    var programID = document.location.pathname.split('/').pop();
+    if (programID) {
+      new Parse.Query(Program).get(programID).then(function(program) {
+        editor.setValue(program.get('code'));
+      });
+    } else {
+      editor.setValue(window.localStorage.getItem('code') || 'put your code here');
+      editor.clearSelection();
+      editor.focus();
+    }
 
     var textarea = document.getElementsByTagName('textarea')[0];
     var output = document.getElementById('output');
@@ -68,13 +83,13 @@
     }).join('');
 
     function run() {
+      var code = editor.getValue();
       x = 150;
       y = 150;
       a = 90;
       isDrawing = true;
       canvas.width = canvas.width; // clowns
       context.moveTo(x, y);
-      var code = editor.getValue();
       window.localStorage.setItem('code', code);
       output.innerText = '';
       try {
@@ -86,6 +101,10 @@
       }
       editor.focus();
       context.stroke();
+
+      new Program({code: code}).save().then(function(program) {
+        history.pushState(null, null, program.id);
+      });
     }
   </script>
 </body>
