@@ -26,6 +26,8 @@
     editor.setTheme("ace/theme/solarized_light");
     editor.getSession().setMode("ace/mode/javascript");
     editor.getSession().setOption("useWorker", false);
+    editor.setValue(window.localStorage.getItem('code') || 'put your code here');
+    editor.clearSelection();
     editor.focus();
 
     var textarea = document.getElementsByTagName('textarea')[0];
@@ -35,7 +37,6 @@
 
     context.strokeStyle = 'black';
 
-    editor.setValue(window.localStorage.getItem('code') || 'put your code here');
 
     var x, y, a;
 
@@ -48,7 +49,7 @@
       x = x + distance * Math.cos(a / 180 * Math.PI);
       y = y - distance * Math.sin(a / 180 * Math.PI);
       context.lineTo(x, y);
-      context.stroke();
+
     }
 
     function left(angle) {
@@ -78,6 +79,7 @@
         log(e.message);
       }
       editor.focus();
+      context.stroke();
     }
   </script>
 </body>
