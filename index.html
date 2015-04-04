@@ -35,7 +35,7 @@
     editor.getSession().setMode("ace/mode/javascript");
     editor.getSession().setOption("useWorker", false);
 
-    var programID = document.location.pathname.split('/').pop();
+    var programID = document.location.hash.substr(1);
     if (programID) {
       new Parse.Query(Program).get(programID).then(function(program) {
         editor.setValue(program.get('code'));
@@ -103,7 +103,7 @@
       context.stroke();
 
       new Program({code: code}).save().then(function(program) {
-        history.pushState(null, null, program.id);
+        history.pushState(null, null, '#' + program.id);
       });
     }
   </script>
