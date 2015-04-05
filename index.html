@@ -43,7 +43,7 @@
   <button onclick="run();">Run</button>
   <div class="canvas-wrapper">
     <canvas width="500" height="500"></canvas>
-    <div id="turtle">⬆</div>
+    <div id="turtle">^</div>
   </div>
   <div id="output"></div>
 
@@ -128,7 +128,7 @@
       turtle.style.left = x + 'px';
       turtle.style.top = y + 'px';
       turtle.style['-webkit-transform'] = 'rotate(' + (90 - a) + 'deg)';
-      turtle.innerHTML = isDrawing ? '\u2b06' : '\u21e7';
+      // turtle.innerHTML = isDrawing ? '\u2b06' : '\u21e7';
       editor.focus();
 
       new Program({code: code}).save().then(function(program) {
