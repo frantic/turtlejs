@@ -25,13 +25,15 @@
       align-items: center;
       justify-content: center;
       position: absolute;
-      width: 20px;
-      height: 30px;
+      width: 39px;
+      height: 55px;
       left: 150px;
       top: 150px;
       color: green;
-      margin-left: -10px;
-      margin-top: -15px;
+      margin-left: -19px;
+      margin-top: -27px;
+      background: url(turtle.png);
+      background-size: 39px 55px;
     }
     .canvas-wrapper:hover #turtle {
       display: flex;
@@ -43,7 +45,7 @@
   <button onclick="run();">Run</button>
   <div class="canvas-wrapper">
     <canvas width="500" height="500"></canvas>
-    <div id="turtle">^</div>
+    <div id="turtle"></div>
   </div>
   <div id="output"></div>
 
@@ -128,7 +130,6 @@
       turtle.style.left = x + 'px';
       turtle.style.top = y + 'px';
       turtle.style['-webkit-transform'] = 'rotate(' + (90 - a) + 'deg)';
-      // turtle.innerHTML = isDrawing ? '\u2b06' : '\u21e7';
       editor.focus();
 
       new Program({code: code}).save().then(function(program) {
