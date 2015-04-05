@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Turtle.js</title>
+  <meta charset="UTF-8">
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/ace.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/theme-solarized_light.js"></script>
   <script type="text/javascript" src="lib/hidpi-canvas.min.js"></script>
@@ -15,12 +16,35 @@
     canvas {
       border: solid 1px #eee;
     }
+    .canvas-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    #turtle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      width: 20px;
+      height: 30px;
+      left: 150px;
+      top: 150px;
+      color: green;
+      margin-left: -10px;
+      margin-top: -15px;
+    }
+    .canvas-wrapper:hover #turtle {
+      display: flex;
+    }
   </style>
 </head>
 <body>
   <div id="editor"></div>
   <button onclick="run();">Run</button>
-  <canvas width="500" height="500"></canvas>
+  <div class="canvas-wrapper">
+    <canvas width="500" height="500"></canvas>
+    <div id="turtle">⬆</div>
+  </div>
   <div id="output"></div>
 
   <script type="text/javascript">
@@ -48,6 +72,7 @@
 
     var textarea = document.getElementsByTagName('textarea')[0];
     var output = document.getElementById('output');
+    var turtle = document.getElementById('turtle');
     var canvas = document.getElementsByTagName('canvas')[0];
     var context = canvas.getContext('2d');
 
@@ -100,6 +125,10 @@
         console.error(e);
         log(e.message);
       }
+      turtle.style.left = x + 'px';
+      turtle.style.top = y + 'px';
+      turtle.style['-webkit-transform'] = 'rotate(' + (90 - a) + 'deg)';
+      turtle.innerHTML = isDrawing ? '\u2b06' : '\u21e7';
       editor.focus();
 
       new Program({code: code}).save().then(function(program) {
