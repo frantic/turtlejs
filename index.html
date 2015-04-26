@@ -122,8 +122,15 @@
       return 'var ' + key + ' = env.' + key + ';'
     }).join('');
 
+    // Add syntactic sugar
+    function transform(code) {
+      return code.replace(/repeat\((\d+)\)/g, function(match, times) {
+        return 'for (var i = 0; i < ' + times + '; i++)';
+      });
+    }
+
     function run() {
-      var code = editor.getValue();
+      var code = transform(editor.getValue());
       x = 150;
       y = 150;
       a = 90;
